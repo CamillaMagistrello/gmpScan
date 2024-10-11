@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    ports:
+      - "5000:5000"
+    environment:
+      FLASK_ENV: development
+    depends_on:
+      - openvas
+      - blueteamsteve
+      - juice-shop
+    networks:
+      - assignment-network
+
+  openvas:
+    image: mikesplain/openvas
+    ports:
+      - "443:443"
+      - "9390:9390"
+    networks:
+      - assignment-network
+
+  blueteamsteve:
+    image: blueteamsteve/cve-2021-41773:no-cgid
+    ports:
+      - "8080:80"
+    networks:
+      - assignment-network
+
+  juice-shop:
+    image: bkimminich/juice-shop
+    ports:
+      - "3000:3000"
+    networks:
+      - assignment-network
+
+networks:
+  assignment-network:
+    driver: bridge
